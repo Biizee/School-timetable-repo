@@ -9,9 +9,16 @@ from timetable.models import Teacher, Subject
 #
 #)
 
-#irst_subject = Subject.objects.create(
+#first_subject = Subject.objects.create(
 #    name = "Математика",
 #    teacher = first_teacher,
 #
 #)
 
+#!--Getting first teacher and subject by their id
+first_teacher = Teacher.objects.get(id = 1)
+first_subject = Subject.objects.get(id = 1)
+
+#!--Printing first teacher and subject
+print(first_subject.name)
+print(first_teacher.name)
