@@ -20,5 +20,7 @@ first_teacher = Teacher.objects.get(id = 1)
 first_subject = Subject.objects.get(id = 1)
 
 #!--Printing first teacher and subject
-print(first_subject.name)
-print(first_teacher.name)
+print(first_subject)
+print(first_teacher)
+
+
