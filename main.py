@@ -103,7 +103,7 @@ def create_grade():
             date = input("\nEnter date (for example: 2026-01-28): ")
             to_student = int(input("\nEnter student id: "))
             to_student = Student.objects.get(id = to_student)
-            to_subj = int(input("Enter student id: "))
+            to_subj = int(input("Enter subject id: "))
             to_subj = Subject.objects.get(id = to_subj)
             grade_obj = Grade.objects.create(
                 grade = grade,
