@@ -1,50 +1,243 @@
 import django_setup
 
 from timetable.models import Teacher, Subject, Student, Class
+from django.core.exceptions import ObjectDoesNotExist
 
+def list_students_and_classes():
+    classes = Class.objects.all()
+    if classes:
+        for clas in classes:
+            print(f"\nClass id - {clas.id}. Class - {clas.name}. \nStudents:")
+            students = Student.objects.filter(student_class_id = clas)
+            if students:
+                for student in students:
+                    print(f"Student id - {student.id}. Name - {student.name}")
 
-#!--Creating teacher and subject
-#first_teacher = Teacher.objects.create(
-#    name = "Степан",
-#
-#)
+def list_subjects_and_teachers():
+    teachers = Teacher.objects.all()
+    if teachers:
+        for teacher in teachers:
+            print(f"\nTeacher id - {teacher.id}. Name - {teacher.name}")
+            subjects = Subject.objects.filter(teacher_id = teacher)
+            if subjects:
+                for subject in subjects:    
+                    print(f"Subject id - {subject.id}. Subject - {subject.name}. \n")
 
-#first_subject = Subject.objects.create(
-#    name = "Математика",
-#    teacher = first_teacher,
-#
-#)
+def create_class():
+    name = input("Enter class name: ")
+    clas = Class.objects.create(name = name)
+    print(f"Class {clas.name} created succesfully!")
 
-#!--Getting first teacher and subject by their id
-first_teacher = Teacher.objects.get(id = 1)
-first_subject = Subject.objects.get(id = 1)
+def create_student():
+    name = input("Enter student name: ")
+    try:
+        class_id = int(input("Enter class id: "))
+        student = Student.objects.create(
+            name = name,
+            student_class_id = class_id
+        )
+        print(f"\nStudent was succesfully created!")
+    except ObjectDoesNotExist:
+        print(f"\nClass doesn't exitsts. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}")
 
-#!--Printing first teacher and subject
-print(first_teacher)
-print(first_subject)
+def create_teacher():
+    name = input("Enter teacher name: ")
+    teacher = Teacher.objects.create(name = name)
+    print(f"Teacher {teacher.name} created succesfully!")
 
-#!--Printing related Teacher to Subject
-print(first_subject.teacher)
+def create_subject():
+    name = input("Enter subject name: ")
+    try:
+        teacher_id = int(input("Enter teacher id: "))
+        subject = Subject.objects.create(
+            name = name,
+            teacher_id = teacher_id
+        )
+        print(f"\nSubject was succesfully created!")
+    except ObjectDoesNotExist:
+        print(f"\nTeacher doesn't exitsts. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}")
 
-#!--Creating student and his class
-#first_class = Class.objects.create(
-#    name = "1А",
-#
-#)
-#
-#first_student = Student.objects.create(
-#    name = "Андрій",
-#    student_class = first_class,
-#
-#)
+def edit_class():
+    try:
+        clas = int(input("Enter class id: "))
+        clas = Class.objects.get(id = clas)
+        new_name = input("\nEnter new name for class (leave blank to keep current): ")
+        if new_name:
+            clas.name = new_name
+        clas.save()
+        print("\nClass edited succesfully!")
+    except ObjectDoesNotExist:
+        print(f"\nClass doesn't exitsts. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}")
 
-#!--Getting student and class by their id
-first_class = Class.objects.get(id = 1)
-first_student = Student.objects.get(id = 1)
+def edit_student():
+    try:
+        student = int(input("Enter student id: "))
+        student = Student.objects.get(id = student)
+        new_name = input("\nEnter new name for student (leave blank to keep current): ")
+        if new_name:
+            student.name = new_name
+        new_class = int(input("Enter new class id for student (leave blank to keep current): "))
+        if new_class:
+            clas = Class.objects.get(id = new_class)
+            student.student_class_id = clas
+        student.save()
+        print("\nStudent edited succesfully!")
+    except ObjectDoesNotExist:
+        print(f"\nStudent or class doesn't exitsts. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}")
 
-#!--Printing info about class and student
-print(first_class)
-print(first_student)
+def edit_teacher():
+    try:
+        teacher = int(input("Enter teacher id: "))
+        teacher = Teacher.objects.get(id = teacher)
+        new_name = input("\nEnter new name for teacher (leave blank to keep current): ")
+        if new_name:
+            teacher.name = new_name
+        teacher.save()
+        print("\nTeacher edited succesfully!")
+    except ObjectDoesNotExist:
+        print(f"\nTeacher doesn't exitsts. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}")
 
-#!--Printing related Class to Student
-print(first_student.student_class)
+def edit_subject():
+    try:
+        subject = int(input("Enter subject id: "))
+        subject = Subject.objects.get(id = subject)
+        new_name = input("\nEnter new name for subject (leave blank to keep current): ")
+        if new_name:
+            subject.name = new_name
+        new_teacher = int(input("Enter new teacher id for subject (leave blank to keep current): "))
+        if new_teacher:
+            teacher = Teacher.objects.get(id = new_teacher)
+            subject.teacher_id = teacher
+        subject.save()
+        print("\nSubject edited succesfully!")
+    except ObjectDoesNotExist:
+        print(f"\nTeacher or subject doesn't exitsts. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}")
+
+def delete_class():
+    try:
+        clas = int(input("Enter class id: "))
+        clas = Class.objects.get(id = clas)
+        clas.delete()
+        print("\nClass deleted succesfully!")
+    except ObjectDoesNotExist:
+        print(f"\nClass doesn't exists. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}")
+
+def delete_student():
+    try:
+        stident = int(input("Enter student id: "))
+        stident = Student.objects.get(id = stident)
+        stident.delete()
+        print("\nStudent deleted succesfully!")
+    except ObjectDoesNotExist:
+        print(f"\nStudent doesn't exists. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}")
+
+def delete_teacher():
+    try:
+        teacher = int(input("Enter teahcer id: "))
+        teacher = Teacher.objects.get(id = teacher)
+        teacher.delete()
+        print("\nTeacher deleted succesfully!")
+    except ObjectDoesNotExist:
+        print(f"\nTeacher doesn't exists. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}")
+
+def delete_subject():
+    try:
+        subject = int(input("Enter subject id: "))
+        subject = Subject.objects.get(id = subject)
+        subject.delete()
+        print("\nSubject deleted succesfully!")
+    except ObjectDoesNotExist:
+        print(f"\nSubject doesn't exists. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}")
+
+while True:
+    print("""
+Options:
+1. List all students and classes
+2. list all teachers and subjects
+3. Create new class
+4. Create new student
+5. Create new teacher
+6. Create new subject
+7. Edit class
+8. Edit student
+9. Edit teacher
+10. Edit subject
+11. Delete class
+12. Delete student
+13. Delete teacher
+14. Delete subject
+15. Exit""")
+    
+    try:
+        choice = int(input("\nEnter your choice: "))
+    except Exception as e:
+        print(f"Error: {e}")
+    
+    if choice == 15:
+        break
+
+    elif choice == 1:
+        list_students_and_classes()
+
+    elif choice == 2:
+        list_subjects_and_teachers()
+    
+    elif choice == 3:
+        create_class()
+    
+    elif choice == 4:
+        create_student()
+    
+    elif choice == 5:
+        create_teacher()
+    
+    elif choice == 6:
+        create_subject()
+    
+    elif choice == 7:
+        edit_class()
+    
+    elif choice == 8:
+        edit_student()
+    
+    elif choice == 9:
+        edit_teacher()
+    
+    elif choice == 10:
+        edit_subject()
+    
+    elif choice == 11:
+        delete_class()
+    
+    elif choice == 12:
+        delete_student()
+    
+    elif choice == 13:
+        delete_teacher()
+    
+    elif choice == 14:
+        delete_subject()
+
+    else:
+        print("Invalid choice, try again!")
+
