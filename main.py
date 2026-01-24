@@ -24,16 +24,22 @@ def list_subjects_and_teachers():
                     print(f"Subject id - {subject.id}. Subject - {subject.name}. \n")
 
 def create_class():
-    name = input("Enter class name: ")
-    clas = Class.objects.create(name = name)
+    name = input("Enter class name (for example: 3B): ")
+    try:
+        age = int(input("Enter age of science of class (for example: 3): "))
+        clas = Class.objects.create(name = name, age_of_science = age)
+    except Exception as e:
+        print(f"\nError: {e}")
     print(f"Class {clas.name} created succesfully!")
 
 def create_student():
     name = input("Enter student name: ")
+    surname = input("Enter student surname: ")
     try:
         class_id = int(input("Enter class id: "))
         student = Student.objects.create(
             name = name,
+            surname = surname,
             student_class_id = class_id
         )
         print(f"\nStudent was succesfully created!")
@@ -44,15 +50,18 @@ def create_student():
 
 def create_teacher():
     name = input("Enter teacher name: ")
-    teacher = Teacher.objects.create(name = name)
+    surname = input("Enter teacher surname: ")
+    teacher = Teacher.objects.create(name = name, surname = surname)
     print(f"Teacher {teacher.name} created succesfully!")
 
 def create_subject():
     name = input("Enter subject name: ")
+    desc = input("Enter subject description: ")
     try:
         teacher_id = int(input("Enter teacher id: "))
         subject = Subject.objects.create(
             name = name,
+            desc = desc,
             teacher_id = teacher_id
         )
         print(f"\nSubject was succesfully created!")
@@ -68,6 +77,9 @@ def edit_class():
         new_name = input("\nEnter new name for class (leave blank to keep current): ")
         if new_name:
             clas.name = new_name
+        new_age = int(input("\nEnter age of science of class (leave blank to keep current): "))
+        if new_name:
+            clas.age_of_science = new_age
         clas.save()
         print("\nClass edited succesfully!")
     except ObjectDoesNotExist:
@@ -82,6 +94,9 @@ def edit_student():
         new_name = input("\nEnter new name for student (leave blank to keep current): ")
         if new_name:
             student.name = new_name
+        new_surname = input("\nEnter new surname for student (leave blank to keep current): ")
+        if new_surname:
+            student.surname = new_surname
         new_class = int(input("Enter new class id for student (leave blank to keep current): "))
         if new_class:
             clas = Class.objects.get(id = new_class)
@@ -100,6 +115,9 @@ def edit_teacher():
         new_name = input("\nEnter new name for teacher (leave blank to keep current): ")
         if new_name:
             teacher.name = new_name
+        new_surname = input("\nEnter new surname for teacher (leave blank to keep current): ")
+        if new_surname:
+            teacher.surname = new_surname
         teacher.save()
         print("\nTeacher edited succesfully!")
     except ObjectDoesNotExist:
@@ -114,6 +132,9 @@ def edit_subject():
         new_name = input("\nEnter new name for subject (leave blank to keep current): ")
         if new_name:
             subject.name = new_name
+        new_desc = input("\nEnter new description for subject (leave blank to keep current): ")
+        if new_desc:
+            subject.desc = new_desc
         new_teacher = int(input("Enter new teacher id for subject (leave blank to keep current): "))
         if new_teacher:
             teacher = Teacher.objects.get(id = new_teacher)
