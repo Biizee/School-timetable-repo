@@ -33,6 +33,8 @@ class Student(models.Model):
         return self.name
 
 class Schedule(models.Model):
+    day = models.IntegerField()
+    start_time = models.TimeField()
     to_subj = models.ForeignKey(Subject, on_delete=models.PROTECT)
     to_class = models.ForeignKey(Class, on_delete=models.PROTECT)
     to_teacher = models.ForeignKey(Teacher, on_delete=models.PROTECT)
@@ -41,6 +43,8 @@ class Schedule(models.Model):
         return self.to_subj, self.to_class, self.to_teacher
     
 class Grade(models.Model):
+    grade = models.IntegerField()
+    date = models.DateField()
     to_student = models.ForeignKey(Student, on_delete=models.PROTECT)
     to_subj = models.ForeignKey(Subject, on_delete=models.PROTECT)
 

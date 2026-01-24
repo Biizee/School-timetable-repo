@@ -1,6 +1,6 @@
 import django_setup
 
-from timetable.models import Teacher, Subject, Student, Class
+from timetable.models import Teacher, Subject, Student, Class, Schedule, Grade
 from django.core.exceptions import ObjectDoesNotExist
 
 def list_students_and_classes():
@@ -69,6 +69,55 @@ def create_subject():
         print(f"\nTeacher doesn't exitsts. Try again!")
     except Exception as e:
         print(f"\nError: {e}")
+    
+def create_schedule():
+    try:
+        day = int(input("\nEnter number of the day (min 1, max 7): "))
+        if day <= 7 and day > 0:
+            time = input("\nEnter start time of lesson (for example: 17:59:59): ")
+            to_subj = int(input("\nEnter subject id: "))
+            to_subj = Subject.objects.get(id = to_subj)
+            to_class = int(input("Enter class id: "))
+            to_class = Class.objects.get(id = to_class)
+            to_teacher = int(input("Enter teacher id: "))
+            to_teacher = Teacher.objects.get(id = to_teacher)
+            schedule = Schedule.objects.create(
+                day = day,
+                start_time = time,
+                to_subj = to_subj,
+                to_class = to_class,
+                to_teacher = to_teacher
+            )
+            print(f"\nSchedule was succesfully created!")
+        else:
+            print("Wrong number, try again!")
+    except ObjectDoesNotExist:
+        print(f"\nTeacher or class or subject doesn't exitsts. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}") 
+    
+def create_grade():
+    try:
+        grade = int(input("\nEnter grade (min 1, max 12): "))
+        if grade > 0 and grade <= 12:
+            date = input("\nEnter date (for example: 2026-01-28): ")
+            to_student = int(input("\nEnter student id: "))
+            to_student = Student.objects.get(id = to_student)
+            to_subj = int(input("Enter student id: "))
+            to_subj = Subject.objects.get(id = to_subj)
+            grade_obj = Grade.objects.create(
+                grade = grade,
+                date = date,
+                to_student = to_student,
+                to_subj = to_subj
+            )
+            print(f"\nGrade was succesfully created!")
+        else:
+            print("Wrong number, try again!")
+    except ObjectDoesNotExist:
+        print(f"\nStudent or subject doesn't exitsts. Try again!")
+    except Exception as e:
+        print(f"\nError: {e}") 
 
 def edit_class():
     try:
@@ -199,22 +248,24 @@ Options:
 4. Create new student
 5. Create new teacher
 6. Create new subject
-7. Edit class
-8. Edit student
-9. Edit teacher
-10. Edit subject
-11. Delete class
-12. Delete student
-13. Delete teacher
-14. Delete subject
-15. Exit""")
+7. Create new schedule
+8. Create new grade
+9. Edit class
+10. Edit student
+11. Edit teacher
+12. Edit subject
+13. Delete class
+14. Delete student
+15. Delete teacher
+16. Delete subject
+17. Exit""")
     
     try:
         choice = int(input("\nEnter your choice: "))
     except Exception as e:
         print(f"Error: {e}")
     
-    if choice == 15:
+    if choice == 17:
         break
 
     elif choice == 1:
@@ -236,27 +287,33 @@ Options:
         create_subject()
     
     elif choice == 7:
-        edit_class()
+        create_schedule()
     
     elif choice == 8:
-        edit_student()
+        create_grade()
     
     elif choice == 9:
-        edit_teacher()
+        edit_class()
     
     elif choice == 10:
-        edit_subject()
+        edit_student()
     
     elif choice == 11:
-        delete_class()
+        edit_teacher()
     
     elif choice == 12:
-        delete_student()
+        edit_subject()
     
     elif choice == 13:
-        delete_teacher()
+        delete_class()
     
     elif choice == 14:
+        delete_student()
+    
+    elif choice == 15:
+        delete_teacher()
+    
+    elif choice == 16:
         delete_subject()
 
     else:
