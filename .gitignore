@@ -1,2 +1,13 @@
-venv
-__pycache__
+# Python virtual environments
+venv/
+.venv/
+env/
+
+# Python cache files
+pycache/
+*.py[cod]
+*.pyo
+
+# Django specific
+*.sqlite3
+migrations/
