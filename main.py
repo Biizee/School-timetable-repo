@@ -7,7 +7,7 @@ def list_students_and_classes():
     classes = Class.objects.all()
     if classes:
         for clas in classes:
-            print(f"Class id - {clas.id}. Class - {clas.name}. \nStudents:")
+            print(f"\nClass id - {clas.id}. Class - {clas.name}. \nStudents:")
             students = Student.objects.filter(student_class_id = clas)
             if students:
                 for student in students:
@@ -17,7 +17,7 @@ def list_subjects_and_teachers():
     teachers = Teacher.objects.all()
     if teachers:
         for teacher in teachers:
-            print(f"Teacher id - {teacher.id}. Name - {teacher.name}")
+            print(f"\nTeacher id - {teacher.id}. Name - {teacher.name}")
             subjects = Subject.objects.filter(teacher_id = teacher)
             if subjects:
                 for subject in subjects:    
@@ -82,10 +82,10 @@ def edit_student():
         new_name = input("\nEnter new name for student (leave blank to keep current): ")
         if new_name:
             student.name = new_name
-            new_class = int(input("Enter new class id for student (leave blank to keep current): "))
-            if new_class:
-                clas = Class.objects.get(id = new_class)
-                student.student_class_id = clas
+        new_class = int(input("Enter new class id for student (leave blank to keep current): "))
+        if new_class:
+            clas = Class.objects.get(id = new_class)
+            student.student_class_id = clas
         student.save()
         print("\nStudent edited succesfully!")
     except ObjectDoesNotExist:
@@ -114,10 +114,10 @@ def edit_subject():
         new_name = input("\nEnter new name for subject (leave blank to keep current): ")
         if new_name:
             subject.name = new_name
-            new_teacher = int(input("Enter new teacher id for subject (leave blank to keep current): "))
-            if new_teacher:
-                teacher = Teacher.objects.get(id = new_teacher)
-                subject.teacher_id = teacher
+        new_teacher = int(input("Enter new teacher id for subject (leave blank to keep current): "))
+        if new_teacher:
+            teacher = Teacher.objects.get(id = new_teacher)
+            subject.teacher_id = teacher
         subject.save()
         print("\nSubject edited succesfully!")
     except ObjectDoesNotExist:
